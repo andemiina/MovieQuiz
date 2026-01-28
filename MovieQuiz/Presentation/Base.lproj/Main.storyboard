@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,7 +26,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="j8B-ZM-q2E">
-                                <rect key="frame" x="20" y="58" width="374" height="804"/>
+                                <rect key="frame" x="20" y="106" width="374" height="722"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="28s-hg-IZF">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="23.5"/>
@@ -37,7 +37,7 @@
                                                 <color key="textColor" name="YP White (iOS)"/>
                                                 <color key="highlightedColor" name="YP White (iOS)"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="1/10" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKW-yh-o90" userLabel="Index Label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="1/10" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKW-yh-o90" userLabel="Counter Label">
                                                 <rect key="frame" x="338" y="0.0" width="36" height="23.5"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
                                                 <color key="textColor" name="YP White (iOS)"/>
@@ -51,15 +51,20 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="e2U-ms-dJQ" secondAttribute="height" multiplier="2:3" id="bLl-5D-pnJ"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOe-YL-4sA" userLabel="Question Label">
-                                        <rect key="frame" x="0.0" y="624.5" width="374" height="99.5"/>
+                                        <rect key="frame" x="0.0" y="624.5" width="374" height="17.5"/>
                                         <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                         <color key="textColor" name="YP White (iOS)"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="7cO-G7-f4I">
-                                        <rect key="frame" x="0.0" y="744" width="374" height="60"/>
+                                        <rect key="frame" x="0.0" y="662" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jJt-bN-iRN" userLabel="No button">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
@@ -78,6 +83,9 @@
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="noButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QpD-4e-8sK"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yel-3f-4EC" userLabel="Yes button">
                                                 <rect key="frame" x="197" y="0.0" width="177" height="60"/>
@@ -96,6 +104,9 @@
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="yesButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PNf-z0-ENG"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -114,6 +125,11 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="j8B-ZM-q2E" secondAttribute="trailing" constant="20" id="sUO-aT-eSa"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="counterLabel" destination="NKW-yh-o90" id="q9h-zy-6Gs"/>
+                        <outlet property="imageView" destination="e2U-ms-dJQ" id="nGT-r1-hzf"/>
+                        <outlet property="questionLabel" destination="sOe-YL-4sA" id="I8T-eB-yFS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -122,7 +138,7 @@
     </scenes>
     <resources>
         <namedColor name="YP Background (iOS)">
-            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="YP Black (iOS)">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
