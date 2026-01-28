@@ -6,7 +6,6 @@ final class MovieQuizViewController: UIViewController {
     //MARK: - IBOutlets
     
     @IBOutlet private weak var imageView: UIImageView!
-    
     @IBOutlet private weak var questionLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
     
@@ -64,17 +63,14 @@ final class MovieQuizViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         showFirstQuestion()
-//        label.font = UIFont(name: "YSDisplay-Bold", size: 23)
     }
     
     //MARK: - Actions
 
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        //по индексу текущего вопроса находим в массиве нужный моковый вопрос
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
-        
-        //передаем в метод покраски рамок значение сравнивая пральный ответ и ответ который дал пользователь
+
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
         
     }
@@ -90,11 +86,9 @@ final class MovieQuizViewController: UIViewController {
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
-            //инициализируем с помощью UIImage(named: ) если такой нет то подставляем пустую
             image: UIImage(named: model.image) ?? UIImage(),
-            //забираем готовый вопрос из моковых данных
             question: model.text,
-            //высчитываем номер вопроса с помощью переменной тексущего вопроса currentQuestionIndex и массива со списком вопросов questions
+
             questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
         return questionStep
     }
@@ -129,7 +123,7 @@ final class MovieQuizViewController: UIViewController {
     
     private func showNextQuestionOrResult() {
         if currentQuestionIndex == questions.count - 1 {
-            //идем в состояние результат квиза
+
             let text = "Ваш результат: \(correctAnswers)/10"
             let viewModel = QuizResultViewModel(
                 title: "Этот раунд окончен",
