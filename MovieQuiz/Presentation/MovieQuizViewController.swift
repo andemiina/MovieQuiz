@@ -9,11 +9,13 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var questionLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
     
+    @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet private weak var noButton: UIButton!
+    
     // MARK: - Properties
     
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
-    
     private let questions: [QuizQuestion] = [
              QuizQuestion(
                  image: "The Godfather",
@@ -70,9 +72,8 @@ final class MovieQuizViewController: UIViewController {
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
-
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
         
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
@@ -88,7 +89,6 @@ final class MovieQuizViewController: UIViewController {
         let questionStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
-
             questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
         return questionStep
     }
@@ -117,18 +117,19 @@ final class MovieQuizViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.showNextQuestionOrResult()
-            
         }
+        setButtonEnabled(false)
     }
     
     private func showNextQuestionOrResult() {
+        setButtonEnabled(true)
+        
         if currentQuestionIndex == questions.count - 1 {
-
-            let text = "Ваш результат: \(correctAnswers)/10"
+            let text = String(format: Constants.resultText, correctAnswers)
             let viewModel = QuizResultViewModel(
-                title: "Этот раунд окончен",
+                title: Constants.titleText,
                 text: text,
-                buttonText: "Сыграть еще раз")
+                buttonText: Constants.buttonText)
             show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
@@ -146,17 +147,19 @@ final class MovieQuizViewController: UIViewController {
             message: result.text,
             preferredStyle: .alert)
         
-        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
+        let action = UIAlertAction(
+            title: result.buttonText,
+            style: .default) { [weak self] _ in
+                guard let self = self else { return }
+            currentQuestionIndex = 0
+            correctAnswers = 0
             
-            let firstQuestion = self.questions[self.currentQuestionIndex]
-            let viewModel = self.convert(model: firstQuestion)
+            let firstQuestion = questions[currentQuestionIndex]
+            let viewModel = convert(model: firstQuestion)
             self.show(quiz: viewModel)
         }
         
         alert.addAction(action)
-        
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -164,6 +167,18 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.borderWidth = 0
         imageView.layer.borderColor = nil
     }
+    
+    private func setButtonEnabled(_ isEnabled: Bool) {
+        yesButton.isEnabled = isEnabled
+        noButton.isEnabled = isEnabled
+    }
+}
+
+//MARK: - Enums
+private enum Constants {
+    static let resultText = "Ваш результат: %d/10"
+    static let titleText = "Этот раунд окончен"
+    static let buttonText = "Сыграть еще раз"
 }
 
 //MARK: - Structs
