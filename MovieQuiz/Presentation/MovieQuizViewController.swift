@@ -22,7 +22,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestion: QuizQuestion?
     
     private var alertPresenter: AlertPresenterProtocol?
-    
+    private var statisticService: StatisticServiceProtocol = StatisticService()
     
     // MARK: - Lifecycle
     
@@ -31,6 +31,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         setupQuestionFactory()
         setupAlertPresenter()
+        setupStatisticService()
     }
     
     //MARK: - QuestionFactoryDelegate
@@ -97,7 +98,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
-
+    
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
@@ -118,7 +119,20 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         setButtonEnabled(true)
         
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = String(format: Constants.resultText, correctAnswers)
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
+            let text = correctAnswers == questionsAmount ?
+                        """
+                        Поздравляем, вы ответили на 10 из 10!
+                        Количество сыгранных квизов: \(String(describing: statisticService.gamesCount))
+                        Рекорд: \(String(describing: statisticService.bestGame.correct))/10 (\(String(describing: statisticService.bestGame.date.dateTimeString)))
+                        Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
+                        """ :
+                        """
+                        Ваш результат: \(correctAnswers)/10
+                        Количество сыгранных квизов: \(String(describing: statisticService.gamesCount))
+                        Рекорд: \(String(describing: statisticService.bestGame.correct))/10 (\(String(describing: statisticService.bestGame.date.dateTimeString)))
+                        Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
+                        """
             
             let alertModel = AlertModel(
                 title: Constants.titleText,
@@ -148,5 +162,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         yesButton.isEnabled = isEnabled
         noButton.isEnabled = isEnabled
         
+    }
+    
+    private func setupStatisticService() {
+        let statisticService = StatisticService()
+        self.statisticService = statisticService
     }
 }
