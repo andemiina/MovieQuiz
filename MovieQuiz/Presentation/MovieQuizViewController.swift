@@ -53,24 +53,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     //MARK: - Actions
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = true
-        
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        handleAnswer(true)
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = false
-        
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        handleAnswer(false)
     }
     
     //MARK: - Private Methods
+    
+    private func handleAnswer(_ givenAnswer: Bool) {
+        guard let currentQuestion else { return }
+        
+        let isCorrect = givenAnswer == currentQuestion.correctAnswer
+        showAnswerResult(isCorrect: isCorrect)
+    }
     
     private func setupQuestionFactory() {
         let questionFactory = QuestionFactory()
@@ -85,11 +82,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
+        QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
+        )
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -122,13 +119,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             statisticService.store(correct: correctAnswers, total: questionsAmount)
             let text = correctAnswers == questionsAmount ?
                         """
-                        Поздравляем, вы ответили на 10 из 10!
+                        Поздравляем, вы ответили на \(correctAnswers) из \(questionsAmount)!
                         Количество сыгранных квизов: \(String(describing: statisticService.gamesCount))
                         Рекорд: \(String(describing: statisticService.bestGame.correct))/10 (\(String(describing: statisticService.bestGame.date.dateTimeString)))
                         Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
                         """ :
                         """
-                        Ваш результат: \(correctAnswers)/10
+                        Ваш результат: \(correctAnswers)/\(questionsAmount)
                         Количество сыгранных квизов: \(String(describing: statisticService.gamesCount))
                         Рекорд: \(String(describing: statisticService.bestGame.correct))/10 (\(String(describing: statisticService.bestGame.date.dateTimeString)))
                         Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%

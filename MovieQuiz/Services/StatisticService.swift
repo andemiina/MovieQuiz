@@ -3,11 +3,9 @@ import Foundation
 
 final class StatisticService: StatisticServiceProtocol {
     
-    private var totalCorrectAnswers: Int
-    private var totalQuestionsAsked: Int
-    
-    private let storage: UserDefaults = .standard
-    
+    //MARK: - Private Properties
+    private var storage: UserDefaults
+        
     private enum Keys: String {
         case gamesCount
         case bestGameCorrect
@@ -17,9 +15,20 @@ final class StatisticService: StatisticServiceProtocol {
         case totalQuestionsAsked
     }
     
-    init(totalCorrectAnswers: Int = 0, totalQuestionsAsked: Int = 0) {
-        self.totalCorrectAnswers = totalCorrectAnswers
-        self.totalQuestionsAsked = totalQuestionsAsked
+    init(storage: UserDefaults = .standard) {
+        self.storage = storage
+    }
+    
+    //MARK: - Stored Properties
+    
+    private var totalCorrectAnswers: Int {
+        get { storage.integer(forKey: Keys.totalCorrectAnswers.rawValue) }
+        set { storage.set(newValue, forKey: Keys.totalCorrectAnswers.rawValue) }
+    }
+    
+    private var totalQuestionsAsked: Int {
+        get { storage.integer(forKey: Keys.totalQuestionsAsked.rawValue) }
+        set { storage.set(newValue, forKey: Keys.totalQuestionsAsked.rawValue)}
     }
     
     var gamesCount: Int {
@@ -31,7 +40,7 @@ final class StatisticService: StatisticServiceProtocol {
         get {
             let correct = storage.integer(forKey: Keys.bestGameCorrect.rawValue)
             let total = storage.integer(forKey: Keys.bestGameTotal.rawValue)
-            let date = storage.object(forKey: Keys.bestGameDate.rawValue) as? Date ?? Date()
+            let date = storage.object(forKey: Keys.bestGameDate.rawValue) as? Date ?? .distantPast
             
             return GameResult(correct: correct, total: total, date: date)
         }

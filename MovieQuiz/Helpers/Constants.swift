@@ -7,7 +7,3 @@ enum Constants {
     static let titleText = "Этот раунд окончен"
     static let buttonText = "Сыграть еще раз"
 }
-
-
-
-

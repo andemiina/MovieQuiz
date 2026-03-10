@@ -1,5 +1,4 @@
 
-import Foundation
 import UIKit
 
 struct QuizStepViewModel {
@@ -7,4 +6,3 @@ struct QuizStepViewModel {
     let question: String
     let questionNumber: String
 }
-
