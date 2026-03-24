@@ -19,6 +19,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questionsAmount: Int = 10
+    private var isLoading = false
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     
@@ -29,16 +30,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("🟢 viewDidLoad")
         
-        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
-        statisticService = StatisticService()
-        
-        showLoadingIndicator()
-        questionFactory?.loadData()
-        
-        setupQuestionFactory()
+//        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+//        statisticService = StatisticService()
+                
         setupAlertPresenter()
         setupStatisticService()
+        setupQuestionFactory()
     }
     
     //MARK: - QuestionFactoryDelegate
@@ -57,11 +56,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
+        hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
     
     func didFailToLoadData(with error: Error) {
+        hideLoadingIndicator()
         showNetworkError(message: error.localizedDescription)
     }
     
@@ -86,13 +86,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func setupQuestionFactory() {
+        showLoadingIndicator()
         let questionFactory = QuestionFactory(
             moviesLoader: MoviesLoader(),
             delegate: self
         )
-        questionFactory.delegate = self
         self.questionFactory = questionFactory
-        questionFactory.requestNextQuestion()
+        
+        print("🟡 before loadData")
+        questionFactory.loadData()
     }
     
     private func setupAlertPresenter() {
@@ -181,22 +183,27 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func setupStatisticService() {
-        let statisticService = StatisticService()
-        self.statisticService = statisticService
+//        let statisticService = StatisticService()
+        self.statisticService = StatisticService()
     }
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
+        isLoading = true
     }
     
     private func hideLoadingIndicator() {
-        activityIndicator.isHidden = true
+        guard isLoading else { return }
+        isLoading = false
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { // минимальное время отображения
+            self.activityIndicator.isHidden = true
+            self.activityIndicator.stopAnimating()
+        }
     }
     
     private func showNetworkError(message: String) {
-        hideLoadingIndicator()
-        
         let model = AlertModel(title: "Ошибка",
                                message: message,
                                buttonText: "Попробовать еще раз") { [weak self] in
@@ -205,9 +212,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             
-            self.questionFactory?.requestNextQuestion()
+            self.setupQuestionFactory()
         }
-        
         alertPresenter?.show(quiz: model)
     }
 }
