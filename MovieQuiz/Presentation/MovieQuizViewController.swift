@@ -36,7 +36,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 //        statisticService = StatisticService()
                 
         setupAlertPresenter()
-        setupStatisticService()
+//        setupStatisticService()
         setupQuestionFactory()
     }
     
@@ -111,7 +111,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz step: QuizStepViewModel) {
-        resetBoarder()
+        resetBorder()
         imageView.image = step.image
         questionLabel.text = step.question
         counterLabel.text = step.questionNumber
@@ -134,6 +134,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func showNextQuestionOrResult() {
+        showLoadingIndicator()
         setButtonEnabled(true)
         
         if currentQuestionIndex == questionsAmount - 1 {
@@ -167,11 +168,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
             
-            resetBoarder()
+            resetBorder()
         }
     }
     
-    private func resetBoarder() {
+    private func resetBorder() {
         imageView.layer.borderWidth = 0
         imageView.layer.borderColor = nil
     }
@@ -182,10 +183,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
     }
     
-    private func setupStatisticService() {
-//        let statisticService = StatisticService()
-        self.statisticService = StatisticService()
-    }
+//    private func setupStatisticService() {
+////        let statisticService = StatisticService()
+//        self.statisticService = StatisticService()
+//    }
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false

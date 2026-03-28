@@ -7,10 +7,10 @@ import Foundation
 final class QuestionFactory: QuestionFactoryProtocol {
     
     //MARK: - Properties
-    private let moviesLoader: MoviesLoading
+    private let moviesLoader: MoviesLoaderProtocol
     weak var delegate: QuestionFactoryDelegate?
     
-    init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
+    init(moviesLoader: MoviesLoaderProtocol, delegate: QuestionFactoryDelegate?) {
         self.moviesLoader = moviesLoader
         self.delegate = delegate
     }
@@ -49,11 +49,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 print("Failed to load image")
             }
             
-            let rating = Float(movie.rating) ?? 0
             
-            let text = "Рейтинг этого фильма больше чем 7?"
-            let correctAnswer = rating > 7
-            
+            let randomRating = Double.random(in: 7.0...9.0)
+            let text = "Рейтинг этого фильма больше чем \(String(format: "%.1f", randomRating))?"
+            let correctAnswer = (Double(movie.rating) ?? 0) > randomRating ? true : false
             let question = QuizQuestion(image: imageData,
                                         text: text,
                                         correctAnswer: correctAnswer)

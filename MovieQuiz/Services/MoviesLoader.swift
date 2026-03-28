@@ -2,12 +2,13 @@
 
 import Foundation
 
-protocol MoviesLoading {
+// MARK: - Protocol
+protocol MoviesLoaderProtocol {
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void)
 }
 
-
-struct MoviesLoader: MoviesLoading {
+//MARK: - MoviesLoader
+struct MoviesLoader: MoviesLoaderProtocol {
     private let networkClient = NetworkClient()
     
     private var mostPopularMoviesUrl: URL {
@@ -17,6 +18,7 @@ struct MoviesLoader: MoviesLoading {
         return url
     }
     
+//MARK: - Public Methods
     func loadMovies(handler: @escaping (Result<MostPopularMovies, any Error>) -> Void) {
         networkClient.fetch(url: mostPopularMoviesUrl) { result in
             switch result {
