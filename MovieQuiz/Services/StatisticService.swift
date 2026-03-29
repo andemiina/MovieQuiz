@@ -5,7 +5,7 @@ final class StatisticService: StatisticServiceProtocol {
     
     //MARK: - Private Properties
     private var storage: UserDefaults
-        
+    
     private enum Keys: String {
         case gamesCount
         case bestGameCorrect
@@ -64,7 +64,7 @@ final class StatisticService: StatisticServiceProtocol {
         storage.set(totalQuestionsAsked, forKey: Keys.totalQuestionsAsked.rawValue)
         
         gamesCount += 1
-                
+        
         let currentGame = GameResult(correct: count, total: amount, date: Date())
         
         if currentGame.isBetterThan(bestGame) {
