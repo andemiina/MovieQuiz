@@ -23,7 +23,13 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        yesButton.accessibilityIdentifier = "Yes"
+        noButton.accessibilityIdentifier = "No"
+        imageView.accessibilityIdentifier = "Poster"
+        counterLabel.accessibilityIdentifier = "Index"
+        
         presenter = MovieQuizPresenter(viewController: self)
+        presenter?.loadData()
         showLoadingIndicator()
     }
     
@@ -42,6 +48,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     //MARK: - Methods
     
     func show(quiz step: QuizStepViewModel) {
+        print("imageView:", imageView as Any)
+            print("questionLabel:", questionLabel as Any)
+        
         resetBorder()
         imageView.image = step.image
         questionLabel.text = step.question
@@ -108,10 +117,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         
         let action = UIAlertAction(title: "Попробоваться еще раз", style: .default)
         { [ weak self ] _ in
-            guard let self = self else { return }
-            
-            self.presenter?.resetQuestionIndex()
+            self?.presenter?.resetQuestionIndex()
         }
         alert.addAction(action)
+        present(alert, animated: true)
     }
 }

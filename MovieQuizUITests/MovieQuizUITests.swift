@@ -1,4 +1,3 @@
-
 import XCTest
 
 final class MovieQuizUITests: XCTestCase {
@@ -78,7 +77,7 @@ final class MovieQuizUITests: XCTestCase {
 
         let alert = app.alerts["Game results"]
         
-        sleep(2)
+        sleep(5)
         XCTAssertTrue(alert.exists)
         XCTAssertTrue(alert.label == "Этот раунд окончен!")
         XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть ещё раз")

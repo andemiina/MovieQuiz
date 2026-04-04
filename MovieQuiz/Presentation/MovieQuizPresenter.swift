@@ -18,11 +18,16 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     init(viewController: MovieQuizViewControllerProtocol) {
         
         self.viewController = viewController
-        questionFactory.loadData()
-        viewController.showLoadingIndicator()
+//        questionFactory.loadData()
+//        viewController.showLoadingIndicator()
     }
     
     //MARK: - Methods
+    func loadData() {
+        viewController?.showLoadingIndicator()
+        questionFactory.loadData()
+    }
+    
     func didLoadDataFromServer() {
         viewController?.hideLoadingIndicator()
         questionFactory.requestNextQuestion()
@@ -67,7 +72,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
+            image: UIImage(data: model.image) ?? UIImage(systemName: "photo")!,
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)")
     }
@@ -108,6 +113,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     private func proceedToNextQuestionOrResults() {
+        viewController?.setButtonEnabled(true)
         if self.isLastQuestion() {
             let text = correctAnswers == self.questionAmount ?
             "Поздравляем, вы ответили на 10 из 10!" :
