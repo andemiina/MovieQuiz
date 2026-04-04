@@ -1,7 +1,6 @@
 
 import Foundation
 
-
 //MARK: - QuestionFactory
 
 final class QuestionFactory: QuestionFactoryProtocol {
@@ -63,7 +62,4 @@ final class QuestionFactory: QuestionFactoryProtocol {
             }
         }
     }
-    
-    
-    
 }
