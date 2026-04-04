@@ -6,6 +6,13 @@ protocol MoviesLoaderProtocol {
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void)
 }
 
+// MARK: - Enums
+enum MoviesLoaderError: Error {
+    case apiError(String)
+    case noData
+    case decodingError(Error)
+}
+
 //MARK: - MoviesLoader
 struct MoviesLoader: MoviesLoaderProtocol {
     
@@ -23,12 +30,7 @@ struct MoviesLoader: MoviesLoaderProtocol {
         }
         return url
     }
-    
-    enum MoviesLoaderError: Error {
-        case apiError(String)
-        case noData
-        case decodingError(Error)
-    }
+
     //MARK: - Public Methods
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
         networkClient.fetch(url: mostPopularMoviesUrl) { result in

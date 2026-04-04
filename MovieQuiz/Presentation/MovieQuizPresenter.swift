@@ -18,8 +18,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     init(viewController: MovieQuizViewControllerProtocol) {
         
         self.viewController = viewController
-//        questionFactory.loadData()
-//        viewController.showLoadingIndicator()
     }
     
     //MARK: - Methods
@@ -35,11 +33,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func didFailToLoadData(with error: any Error) {
         let message = error.localizedDescription
-        viewController?.showNetworkError(message: message) // возьмём в качестве сообщения описание ошибки
+        viewController?.showNetworkError(message: message)
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
+        guard let question else {
             return
         }
         
@@ -116,13 +114,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         viewController?.setButtonEnabled(true)
         if self.isLastQuestion() {
             let text = correctAnswers == self.questionAmount ?
-            "Поздравляем, вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
-            
+            Constants.winText : Constants.tryAgainText
             let viewModel = QuizResultViewModel(
-                title: "Этот раунд окончен!",
+                title: Constants.titleText,
                 text: text,
-                buttonText: "Сыграть ещё раз")
+                buttonText: Constants.buttonText)
             viewController?.show(quiz: viewModel)
         } else {
             self.switchToNextQuestion()

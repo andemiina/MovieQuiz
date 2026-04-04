@@ -115,7 +115,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         hideLoadingIndicator()
         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "Попробоваться еще раз", style: .default)
+        let action = UIAlertAction(title: "Попробовать еще раз", style: .default)
         { [ weak self ] _ in
             self?.presenter?.resetQuestionIndex()
         }
